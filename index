@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UG Proton | Honhaar Scholarship Phase 4 GPA Calculator</title>
+
+<style>
+:root{
+  --green:#0f4a38; --green2:#146048; --green3:#0b3a2b;
+  --gold:#e8c56b; --bg:#eaf3ee; --text:#1c2f26; --muted:#667a70;
+  --line:#dbe6df; --wa:#25c262; --ok:#0f7a45; --bad:#b3261e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.5;
+  min-height:100vh;overflow-x:hidden;padding:18px 12px 30px;
+}
+a{text-decoration:none;color:inherit}
+
+.card{
+  width:100%;max-width:480px;margin:0 auto;background:#fff;
+  border-radius:22px;overflow:hidden;box-shadow:0 10px 40px rgba(15,74,56,.15);
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(160deg,var(--green2),var(--green3));
+  color:#fff;text-align:center;padding:26px 20px 22px;
+}
+.logo{
+  width:72px;height:72px;border-radius:50%;border:3px solid rgba(255,255,255,.85);
+  background:#fff;object-fit:cover;display:block;margin:0 auto;
+}
+.tag{
+  display:inline-block;margin-top:10px;padding:4px 12px;border-radius:99px;
+  background:rgba(255,255,255,.14);font-size:10.5px;font-weight:700;letter-spacing:1.2px;
+}
+.hero h1{
+  font-family:Georgia,"Times New Roman",serif;font-size:25px;line-height:1.25;margin:12px 0 6px;
+}
+.hero .sub{font-size:13px;opacity:.85}
+.creator{
+  display:inline-block;margin-top:12px;padding:8px 18px;border-radius:12px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(232,197,107,.55);
+}
+.creator small{display:block;font-size:10px;letter-spacing:1.6px;color:var(--gold);font-weight:700}
+.creator b{font-size:18px;letter-spacing:.3px;color:#fff}
+.pill-wa{
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:8px 16px;
+  border-radius:99px;border:1px solid rgba(255,255,255,.45);font-size:12.5px;font-weight:600;
+  background:rgba(255,255,255,.08);
+}
+
+/* BODY */
+.body{padding:18px 16px 20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+.chip{
+  background:#eef5f0;border-radius:10px;padding:6px 10px;font-size:12px;color:var(--muted);
+}
+.chip b{
+  background:var(--green);color:#fff;border-radius:6px;padding:2px 6px;margin-right:5px;font-size:11px;
+}
+
+.box{border:1px solid var(--line);border-radius:14px;padding:14px}
+.box + .box{margin-top:12px}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--green);margin:0 0 6px}
+.f{margin-bottom:12px}
+.f:last-child{margin-bottom:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input,select{
+  width:100%;max-width:100%;min-width:0;font-size:16px;font-family:inherit;color:var(--text);
+  padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;outline:none;
+}
+select{
+  -webkit-appearance:none;appearance:none;padding-right:34px;text-overflow:ellipsis;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230f4a38' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px rgba(20,96,72,.15)}
+.err{display:none;margin-top:10px;font-size:13px;color:var(--bad)}
+
+.actions{display:flex;gap:8px;margin-top:14px}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:inherit;font-size:15px;font-weight:700;padding:13px;border-radius:12px;
+  border:1px solid transparent;cursor:pointer;text-align:center;width:100%;
+}
+.btn-main{flex:1;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;box-shadow:0 4px 12px rgba(15,74,56,.25)}
+.btn-reset{width:auto;padding:13px 18px;background:#eef5f0;color:var(--green)}
+.btn-wa{background:var(--wa);color:#fff;margin-top:10px}
+.btn-sm{background:#fff;color:var(--green);border-color:var(--line);font-size:13.5px;padding:11px 8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+
+/* RESULT */
+#result{display:none;margin-top:14px;border-radius:14px;padding:16px;border:1.5px solid;text-align:center}
+#result.ok{display:block;background:#eaf6ef;border-color:#9bd1b3}
+#result.bad{display:block;background:#fdeeed;border-color:#f0b4b0}
+#badge{font-size:12px;font-weight:800;letter-spacing:.8px}
+#result.ok #badge{color:var(--ok)} #result.bad #badge{color:var(--bad)}
+#pct{font-size:38px;font-weight:800;line-height:1.15;margin:4px 0}
+#result.ok #pct{color:var(--ok)} #result.bad #pct{color:var(--bad)}
+#msg{font-size:13.5px}
+.bar{height:10px;background:#fff;border-radius:99px;border:1px solid var(--line);position:relative;margin:12px 0 4px;overflow:visible}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--ok);transition:width .5s}
+#result.bad .bar i{background:var(--bad)}
+.bar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--text)}
+.barlbl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+#need{margin-top:8px;font-size:13.5px;font-weight:600}
+
+.notice{
+  margin-top:14px;padding:11px 12px;background:#fdf7e8;border:1px solid #f0dfb0;
+  border-radius:10px;font-size:11.5px;color:#6b5a2a;
+}
+.foot{text-align:center;margin-top:14px;font-size:11.5px;color:var(--muted)}
+.foot b{color:var(--green)}
+
+@media (max-width:420px){
+  .hero h1{font-size:22px}
+  .row{grid-template-columns:1fr}
+  .row .f + .f{margin-top:12px}
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+
+  <header class="hero">
+    <!-- logo.jpg isi folder mein ho to wahi dikhegi, warna neeche wala SVG logo -->
+    <img src="logo.jpg" class="logo" alt="UG Proton Logo"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <svg class="logo" style="display:none" viewBox="0 0 200 200" aria-label="University Guide by Proton logo">
+      <defs><path id="ugarc" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
+      <circle cx="100" cy="100" r="98" fill="#143f2b"/>
+      <circle cx="100" cy="100" r="58" fill="#fff"/>
+      <g fill="none" stroke="#143f2b" stroke-width="3.5">
+        <ellipse cx="100" cy="112" rx="38" ry="14" transform="rotate(30 100 112)"/>
+        <ellipse cx="100" cy="112" rx="38" ry="14" transform="rotate(-30 100 112)"/>
+        <ellipse cx="100" cy="112" rx="14" ry="38"/>
+      </g>
+      <polygon points="100,62 140,78 100,94 60,78" fill="#143f2b"/>
+      <path d="M78,86 v14 q22,12 44,0 v-14 l-22,10z" fill="#143f2b"/>
+      <text font-size="17" font-weight="700" fill="#fff" letter-spacing="1.2">
+        <textPath href="#ugarc" startOffset="3%">University Guide By Proton</textPath>
+      </text>
+    </svg>
+
+    <span class="tag">FREE ONLINE TOOL • PHASE 4</span>
+    <h1>Honhaar Scholarship GPA / CGPA Calculator</h1>
+    <p class="sub">For 2nd semester / year onward students</p>
+
+    <div class="creator">
+      <small>CREATED BY</small>
+      <b>Abdullah Tariq</b>
+    </div>
+    <br>
+    <a class="pill-wa" href="https://whatsapp.com/channel/0029VbA5b4wHrDZn21Ydx03W" target="_blank" rel="noopener noreferrer">
+      💬 Join our WhatsApp channel — UG Proton (Official)
+    </a>
+  </header>
+
+  <main class="body">
+    <div class="chips">
+      <span class="chip"><b>70%</b>Science</span>
+      <span class="chip"><b>65%</b>Arts</span>
+      <span class="chip"><b>80%</b>MBBS / BDS</span>
+    </div>
+
+    <div class="box">
+      <div class="f">
+        <label for="category">Select your category</label>
+        <select id="category">
+          <option value="70">Science – Public Sector University / College (70%)</option>
+          <option value="65">Arts – Public Sector University / College (65%)</option>
+          <option value="80">MBBS / BDS – Public Sector (80%)</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="f">
+          <label for="gpa">Your GPA / CGPA</label>
+          <input type="number" id="gpa" inputmode="decimal" min="0" step="0.01" placeholder="e.g. 2.80">
+        </div>
+        <div class="f">
+          <label for="scale">GPA scale</label>
+          <select id="scale">
+            <option value="4">Out of 4.00</option>
+            <option value="5">Out of 5.00</option>
+            <option value="10">Out of 10.00</option>
+          </select>
+        </div>
+      </div>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-main" onclick="checkEligibility()">🧮 Calculate eligibility</button>
+      <button type="button" class="btn btn-reset" onclick="resetCalculator()">Reset</button>
+    </div>
+
+    <section id="result" aria-live="polite">
+      <div id="badge"></div>
+      <div id="pct"></div>
+      <div id="msg"></div>
+      <div class="bar"><i id="fill"></i><b id="mark"></b></div>
+      <div class="barlbl"><span>0%</span><span id="reqlbl"></span><span>100%</span></div>
+      <div id="need"></div>
+    </section>
+
+    <a class="btn btn-wa" href="https://whatsapp.com/channel/0029VbA5b4wHrDZn21Ydx03W" target="_blank" rel="noopener noreferrer">
+      💬 Join UG Proton (Official) WhatsApp Channel
+    </a>
+
+    <div class="two">
+      <a class="btn btn-sm" href="tel:+923400647730">📞 0340-0647730</a>
+      <a class="btn btn-sm" href="https://wa.me/923400647730" target="_blank" rel="noopener noreferrer">💬 Chat on WhatsApp</a>
+    </div>
+
+    <div class="notice">
+      <b>Important:</b> Percentage = GPA ÷ maximum GPA × 100 (simple estimate). Aapki university ka official
+      conversion formula alag ho sakta hai. Apply karne se pehle official criteria confirm karein.
+      Minimum threshold poora karna scholarship ki guarantee nahi hai.
+    </div>
+
+    <p class="foot">
+      Built &amp; maintained by
+      <a href="https://whatsapp.com/channel/0029VbA5b4wHrDZn21Ydx03W" target="_blank" rel="noopener noreferrer"><b>UG Proton (Official)</b></a><br>
+      Created by <b>Abdullah Tariq</b>
+    </p>
+  </main>
+</div>
+
+<script>
+function checkEligibility() {
+  var gpaInput = document.getElementById("gpa");
+  var scale = Number(document.getElementById("scale").value);
+  var req = Number(document.getElementById("category").value);
+  var res = document.getElementById("result");
+  var err = document.getElementById("err");
+  var gpa = Number(gpaInput.value);
+
+  err.style.display = "none";
+
+  if (gpaInput.value.trim() === "" || !isFinite(gpa) || gpa < 0 || gpa > scale) {
+    res.className = "";
+    err.textContent = "Please enter a valid value between 0 and " + scale + ".";
+    err.style.display = "block";
+    return;
+  }
+
+  var pct = gpa / scale * 100;
+  var ok = pct >= req;
+
+  res.className = ok ? "ok" : "bad";
+  document.getElementById("badge").textContent = ok ? "MINIMUM THRESHOLD MET ✓" : "BELOW MINIMUM THRESHOLD";
+  document.getElementById("pct").textContent = pct.toFixed(2) + "%";
+  document.getElementById("msg").textContent = ok
+    ? "You are " + (pct - req).toFixed(2) + "% above the " + req + "% minimum."
+    : "You are " + (req - pct).toFixed(2) + "% below the " + req + "% minimum.";
+  document.getElementById("fill").style.width = Math.min(pct, 100) + "%";
+  document.getElementById("mark").style.left = req + "%";
+  document.getElementById("reqlbl").textContent = "Min " + req + "%";
+  document.getElementById("need").textContent =
+    "Minimum needed on this scale: " + (req / 100 * scale).toFixed(2) + " / " + scale.toFixed(2);
+}
+
+function resetCalculator() {
+  document.getElementById("gpa").value = "";
+  document.getElementById("scale").value = "4";
+  document.getElementById("category").selectedIndex = 0;
+  document.getElementById("result").className = "";
+  document.getElementById("err").style.display = "none";
+}
+
+document.getElementById("gpa").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") checkEligibility();
+});
+</script>
+
+<script data-goatcounter="https://abdullahnewbie3.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
